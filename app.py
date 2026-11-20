@@ -289,32 +289,86 @@ def scan_website(raw_url):
         )
 
 
+
 with gr.Blocks(
     title="Digital Accessibility & Security Auditor",
     theme=gr.themes.Soft()
 ) as app:
+
     gr.Markdown(
-        "# 🛡️ Digital Accessibility & Security Auditor\n"
-        "### Evaluate public websites for accessibility and basic security settings.\n"
-        "Enter a public website URL below to begin."
+        """
+        # 🛡️ Digital Accessibility & Security Auditor
+
+        ### Making the web safer and more accessible.
+
+        Evaluate public websites for accessibility issues
+        and basic security configurations.
+
+        ---
+        """
     )
+
+    with gr.Row():
+        with gr.Column():
+            gr.Markdown(
+                """
+                ### ♿ Accessibility Audit
+                - Image ALT text checks
+                - Form label checks
+                - Link accessibility
+                - Heading structure
+                """
+            )
+
+        with gr.Column():
+            gr.Markdown(
+                """
+                ### 🔒 Security Audit
+                - HTTPS verification
+                - Security header checks
+                - Clickjacking protection
+                - Security recommendations
+                """
+            )
+
+    gr.Markdown("## 🔍 Start Your Website Audit")
+
     website_url = gr.Textbox(
         label="Enter Website URL",
         placeholder="https://www.example.com"
     )
-    scan_button = gr.Button("🔍 Scan Website", variant="primary")
+
+    scan_button = gr.Button(
+        "🔍 Scan Website",
+        variant="primary"
+    )
+
     results = gr.Markdown(label="Audit Report")
-    pdf_download = gr.File(label="Download PDF Audit Report")
+
+    pdf_download = gr.File(
+        label="Download PDF Audit Report"
+    )
+
     scan_button.click(
         fn=scan_website,
         inputs=website_url,
         outputs=[results, pdf_download]
     )
+
     gr.Markdown(
-        "---\n"
-        "This is a preliminary automated audit, not official WCAG certification "
-        "or a complete security assessment. Manual testing is also necessary."
+        """
+        ---
+        ### About This Project
+
+        This tool performs a preliminary automated audit
+        of website accessibility and basic security settings.
+
+        **Note:** This is not official WCAG certification
+        or a complete security assessment. Manual testing
+        is also necessary.
+        """
     )
+
 
 
 if __name__ == "__main__":

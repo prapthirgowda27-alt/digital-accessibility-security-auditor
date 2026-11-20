@@ -82,6 +82,47 @@ def create_pdf(sections):
     return pdf_path
 
 
+def create_donut_charts(access_pass, access_fail, security_pass, security_fail):
+    overall_pass = access_pass + security_pass
+    overall_fail = access_fail + security_fail
+
+    def make_chart(title, passed, failed):
+        total = passed + failed
+        percentage = (passed / total * 100) if total else 0
+        circumference = 2 * 3.14159 * 42
+        dash = circumference * percentage / 100
+
+        return f"""
+        <div style="text-align:center; padding:18px;
+                    background:#111827; border-radius:16px;">
+            <h3 style="color:white;">{title}</h3>
+            <svg viewBox="0 0 120 120" width="150">
+                <circle cx="60" cy="60" r="42"
+                    fill="none" stroke="#EF4444" stroke-width="12"/>
+                <circle cx="60" cy="60" r="42"
+                    fill="none" stroke="#168BFF" stroke-width="12"
+                    stroke-dasharray="{dash} {circumference}"
+                    transform="rotate(-90 60 60)"/>
+                <text x="60" y="56" fill="white"
+                    text-anchor="middle" font-size="17"
+                    font-weight="bold">{percentage:.0f}%</text>
+                <text x="60" y="72" fill="white"
+                    text-anchor="middle" font-size="9">TRUE</text>
+            </svg>
+            <p style="color:#60A5FA;">TRUE: {passed}</p>
+            <p style="color:#F87171;">FALSE: {failed}</p>
+        </div>
+        """
+
+    return f"""
+    <div style="display:grid; grid-template-columns:
+                repeat(auto-fit,minmax(200px,1fr)); gap:15px;">
+        {make_chart("Accessibility", access_pass, access_fail)}
+        {make_chart("Security", security_pass, security_fail)}
+        {make_chart("Overall TRUE / FALSE", overall_pass, overall_fail)}
+    </div>
+    """
+
 def scan_website(raw_url):
     try:
         url = validate_url(raw_url)
@@ -162,6 +203,23 @@ def scan_website(raw_url):
             present.append("Clickjacking Protection")
         else:
             missing_security.append("Clickjacking Protection")
+
+# Chart calculations
+access_total = len(images) + len(links) + len(controls)
+access_issues = (
+    len(missing_alt)
+    + len(missing_links)
+    + len(missing_labels)
+)
+
+access_pass = max(0, access_total - access_issues)
+access_fail = access_issues
+
+security_pass = len(present)
+if final_url.startswith("https://"):
+    security_pass += 1
+
+security_fail = 5 - security_pass
 
         # Prototype scores
         total_checks = len(images) + len(links) + len(controls)
@@ -278,14 +336,20 @@ def scan_website(raw_url):
             ("Security results", security_rows),
             ("Recommendations", [["Recommendation", "Action"]] + [[item, "Review"] for item in recommendations]),
         ])
-        return report, pdf_path
+        charts_html = create_donut_charts(
+    access_pass, access_fail,
+    security_pass, security_fail
+)
+
+return report, pdf_path, charts_html
 
     except Exception as error:
         return (
             "## Scan could not be completed\n\n"
             + escape(str(error))
             + "\n\nCheck the URL and try again.",
-            None
+            None,
+            ""
         )
 
 
@@ -342,7 +406,7 @@ with gr.Blocks(
         "🔍 Scan Website",
         variant="primary"
     )
-
+    charts = gr.HTML(label="Audit Charts")
     results = gr.Markdown(label="Audit Report")
 
     pdf_download = gr.File(
@@ -352,7 +416,7 @@ with gr.Blocks(
     scan_button.click(
         fn=scan_website,
         inputs=website_url,
-        outputs=[results, pdf_download]
+        outputs=[results, pdf_download, charts]
     )
 
     gr.Markdown(

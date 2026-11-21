@@ -146,6 +146,15 @@ def scan_website(raw_url):
         # WCAG 2.4.2 - Page Titled
         page_title = soup.title.string.strip() if soup.title and soup.title.string else ""
         title_status = "Pass" if page_title else "Fail"
+                # WCAG 2.4.6 - Headings and Labels
+        headings = soup.find_all(["h1", "h2", "h3", "h4", "h5", "h6"])
+        empty_headings = [
+            heading for heading in headings
+            if not heading.get_text(strip=True)
+        ]
+        heading_status = (
+            "Pass" if headings and not empty_headings else "Fail"
+        )
 
         headers = response.headers
 

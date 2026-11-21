@@ -245,7 +245,7 @@ def scan_website(raw_url):
             else "Not enough data to calculate"
         )
 
-        access_rows = [
+                access_rows = [
             ["Accessibility check", "Result"],
             ["Total images", len(images)],
             ["Missing ALT text", len(missing_alt)],
@@ -254,6 +254,7 @@ def scan_website(raw_url):
             ["Links without detected names", len(missing_links)],
             ["Form controls", len(controls)],
             ["Controls without detected labels", len(missing_labels)],
+            ["Page language (WCAG 3.1.1)", language_status],
         ]
         heading_rows = [["Heading", "Count"]] + [
             [name, count] for name, count in heading_counts.items()
@@ -292,6 +293,7 @@ def scan_website(raw_url):
 **Website:** {escape(final_url)}
 
 **HTTP Status:** {response.status_code}
+**Page Language (WCAG 3.1.1):** {language_status}
 
 ## 1. Accessibility Results
 

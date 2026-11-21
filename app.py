@@ -350,7 +350,7 @@ def scan_website(raw_url):
             "## Scan could not be completed\n\n"
             + escape(str(error))
             + "\n\nCheck the URL and try again.",
-            None,
+            None
             ""
         )
 

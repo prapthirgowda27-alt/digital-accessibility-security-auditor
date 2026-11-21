@@ -142,6 +142,11 @@ def scan_website(raw_url):
         language_status = (
             "Pass" if page_language else "Fail"
         )
+
+        # WCAG 2.4.2 - Page Titled
+        page_title = soup.title.string.strip() if soup.title and soup.title.string else ""
+        title_status = "Pass" if page_title else "Fail"
+
         headers = response.headers
 
         # Image checks
@@ -260,6 +265,7 @@ def scan_website(raw_url):
             ["Controls without detected labels", len(missing_labels)],
             ["WCAG 3.3.2 - Form controls without labels", len(missing_labels)],
             ["Page language (WCAG 3.1.1)", language_status],
+            ["Page title (WCAG 2.4.2)", title_status],
         ]
         heading_rows = [["Heading", "Count"]] + [
             [name, count] for name, count in heading_counts.items()

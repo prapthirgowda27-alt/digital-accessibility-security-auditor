@@ -135,6 +135,13 @@ def scan_website(raw_url):
         response.raise_for_status()
         final_url = validate_url(response.url)
         soup = BeautifulSoup(response.text, "html.parser")
+        # WCAG 3.1.1 - Page Language
+        html_tag = soup.find("html")
+        page_language = html_tag.get("lang") if html_tag else None
+
+        language_status = (
+            "Pass" if page_language else "Fail"
+        )
         headers = response.headers
 
         # Image checks

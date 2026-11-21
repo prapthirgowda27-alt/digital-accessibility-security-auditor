@@ -204,22 +204,22 @@ def scan_website(raw_url):
         else:
             missing_security.append("Clickjacking Protection")
 
-# Chart calculations
-access_total = len(images) + len(links) + len(controls)
-access_issues = (
-    len(missing_alt)
-    + len(missing_links)
-    + len(missing_labels)
-)
+        # Chart calculations
+        access_total = len(images) + len(links) + len(controls)
+        access_issues = (
+            len(missing_alt)
+            + len(missing_links)
+            + len(missing_labels)
+        )
 
-access_pass = max(0, access_total - access_issues)
-access_fail = access_issues
+        access_pass = max(0, access_total - access_issues)
+        access_fail = access_issues
 
-security_pass = len(present)
-if final_url.startswith("https://"):
-    security_pass += 1
+        security_pass = len(present)
+        if final_url.startswith("https://"):
+            security_pass += 1
 
-security_fail = 5 - security_pass
+        security_fail = 5 - security_pass
 
         # Prototype scores
         total_checks = len(images) + len(links) + len(controls)
@@ -336,12 +336,12 @@ security_fail = 5 - security_pass
             ("Security results", security_rows),
             ("Recommendations", [["Recommendation", "Action"]] + [[item, "Review"] for item in recommendations]),
         ])
-        charts_html = create_donut_charts(
-    access_pass, access_fail,
-    security_pass, security_fail
-)
+                charts_html = create_donut_charts(
+            access_pass, access_fail,
+            security_pass, security_fail
+        )
 
-return report, pdf_path, charts_html
+        return report, pdf_path, charts_html
 
     except Exception as error:
         return (

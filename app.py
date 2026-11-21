@@ -334,9 +334,11 @@ def scan_website(raw_url):
             ("Accessibility results", access_rows),
             ("Heading structure", heading_rows),
             ("Security results", security_rows),
-            ("Recommendations", [["Recommendation", "Action"]] + [[item, "Review"] for item in recommendations]),
-        ])
-                charts_html = create_donut_charts(
+            ("Recommendations",             ["Recommendations", "Action"]
+        ] + [[item, "Review"] for item in recommendations]),
+    ])
+
+        charts_html = create_donut_charts(
             access_pass, access_fail,
             security_pass, security_fail
         )

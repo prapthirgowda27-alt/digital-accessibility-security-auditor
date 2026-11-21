@@ -231,10 +231,12 @@ def scan_website(raw_url):
         # Prototype scores
         total_checks = len(images) + len(links) + len(controls)
         total_issues = len(missing_alt) + len(missing_links) + len(missing_labels)
+
         accessibility_score = (
             max(0, (total_checks - total_issues) / total_checks * 100)
             if total_checks else None
         )
+
         security_score = (
             (len(present) + int(final_url.startswith("https://"))) / 5 * 100
         )
@@ -245,7 +247,7 @@ def scan_website(raw_url):
             else "Not enough data to calculate"
         )
 
-                access_rows = [
+        access_rows = [
             ["Accessibility check", "Result"],
             ["Total images", len(images)],
             ["Missing ALT text", len(missing_alt)],

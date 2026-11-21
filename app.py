@@ -329,7 +329,7 @@ def scan_website(raw_url):
 *This is a preliminary automated audit, not official WCAG certification or a complete security assessment. Manual testing is also necessary.*
 """
 
-                pdf_path = create_pdf([
+        pdf_path = create_pdf([
             ("Website information", [
                 ["Website", final_url],
                 ["HTTP status", response.status_code]

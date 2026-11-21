@@ -329,14 +329,18 @@ def scan_website(raw_url):
 *This is a preliminary automated audit, not official WCAG certification or a complete security assessment. Manual testing is also necessary.*
 """
 
-        pdf_path = create_pdf([
-            ("Website information", [["Website", final_url], ["HTTP status", response.status_code]]),
+                pdf_path = create_pdf([
+            ("Website information", [
+                ["Website", final_url],
+                ["HTTP status", response.status_code]
+            ]),
             ("Accessibility results", access_rows),
             ("Heading structure", heading_rows),
             ("Security results", security_rows),
-            ("Recommendations",
- ["Recommendations", "Action"] + [[item, "Review"] for item in recommendations]),
-    ])
+            ("Recommendations", [
+                ["Recommendations", "Action"]
+            ] + [[item, "Review"] for item in recommendations])
+        ])
 
         charts_html = create_donut_charts(
             access_pass, access_fail,

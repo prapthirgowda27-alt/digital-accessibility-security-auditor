@@ -250,10 +250,13 @@ def scan_website(raw_url):
             ["Total images", len(images)],
             ["Missing ALT text", len(missing_alt)],
             ["Empty ALT text", len(empty_alt)],
+            ["WCAG 1.1.1 - Images without ALT text", len(missing_alt) + len(empty_alt)],
             ["Total links", len(links)],
             ["Links without detected names", len(missing_links)],
+            ["WCAG 2.4.4 - Links without accessible names", len(missing_links)],
             ["Form controls", len(controls)],
             ["Controls without detected labels", len(missing_labels)],
+            ["WCAG 3.3.2 - Form controls without labels", len(missing_labels)],
             ["Page language (WCAG 3.1.1)", language_status],
         ]
         heading_rows = [["Heading", "Count"]] + [

@@ -273,7 +273,7 @@ def scan_website(raw_url):
             ["Total images", len(images)],
             ["Missing ALT text", len(missing_alt)],
             ["Empty ALT text", len(empty_alt)],
-            ["WCAG 1.1.1 - Images without ALT text", len(missing_alt) + len(empty_alt)],
+            ["WCAG 1.1.1 - Images missing ALT attribute", len(missing_alt)],
             ["Total links", len(links)],
             ["Links without detected names", len(missing_links)],
             ["WCAG 2.4.4 - Links without accessible names", len(missing_links)],
@@ -310,7 +310,7 @@ def scan_website(raw_url):
             recommendations.append(
                 "Add clear, descriptive headings and ensure heading elements are not empty."
             )
-        if missing_alt or empty_alt:
+        if missing_alt:
             recommendations.append(
                 "Provide appropriate alternative text for informative images and use empty alt text for decorative images."
             )

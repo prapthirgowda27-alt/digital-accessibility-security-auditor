@@ -219,6 +219,21 @@ def scan_website(raw_url):
             if not labelled:
                 missing_labels.append(control)
 
+        # Page content detection
+        detected_elements = (
+            len(images)
+            + len(links)
+            + len(controls)
+            + len(headings)
+        )
+
+        if detected_elements == 0:
+            raise ValueError(
+                "No page content detected. "
+                "The website may use JavaScript or block automated scanning. "
+                "This result cannot be used as an accessibility score."
+            )
+
         # Heading structure
         heading_counts = {
             f"H{i}": len(soup.find_all(f"h{i}"))

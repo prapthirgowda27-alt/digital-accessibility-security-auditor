@@ -298,6 +298,34 @@ def scan_website(raw_url):
         ]
 
         recommendations = []
+        if language_status == "Fail":
+            recommendations.append(
+                "Add a valid lang attribute to the HTML element to identify the page language."
+            )
+        if title_status == "Fail":
+            recommendations.append(
+                "Add a descriptive title element to identify the webpage."
+            )
+        if heading_status == "Fail":
+            recommendations.append(
+                "Add clear, descriptive headings and ensure heading elements are not empty."
+            )
+        if missing_alt or empty_alt:
+            recommendations.append(
+                "Provide appropriate alternative text for informative images and use empty alt text for decorative images."
+            )
+        if missing_links:
+            recommendations.append(
+                "Give links descriptive accessible names so users understand their purpose."
+            )
+        if missing_labels:
+            recommendations.append(
+                "Add clear, programmatically associated labels to all form controls."
+            )
+        if focus_elements:
+            recommendations.append(
+                "Manually test keyboard navigation to ensure focus moves in a logical and predictable order."
+            )
         if missing_alt:
             recommendations.append("Review images missing ALT attributes.")
         if empty_alt:

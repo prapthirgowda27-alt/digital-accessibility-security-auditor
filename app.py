@@ -128,13 +128,26 @@ def scan_website(raw_url):
         url = validate_url(raw_url)
         response = requests.get(
             url,
-            timeout=20,
+            timeout=30,
             allow_redirects=True,
-            headers={"User-Agent": "AccessibilityStudentAuditor/1.0"}
+            headers={
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
+                )
+            }
         )
         response.raise_for_status()
+
         final_url = validate_url(response.url)
+
+        if not response.text.strip():
+            raise ValueError("Website returned an empty HTML page.")
+
         soup = BeautifulSoup(response.text, "html.parser")
+
+        if not soup.find("html"):
+            raise ValueError("Website did not return a valid HTML document.")
         # WCAG 3.1.1 - Page Language
         html_tag = soup.find("html")
         page_language = html_tag.get("lang") if html_tag else None

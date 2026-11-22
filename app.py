@@ -250,8 +250,18 @@ def scan_website(raw_url):
         security_fail = 5 - security_pass
 
         # Prototype scores
-        total_checks = len(images) + len(links) + len(controls)
-        total_issues = len(missing_alt) + len(missing_links) + len(missing_labels)
+        total_checks = (
+            len(images) + len(links) + len(controls) + 3
+        )
+
+        total_issues = (
+            len(missing_alt)
+            + len(missing_links)
+            + len(missing_labels)
+            + int(language_status == "Fail")
+            + int(title_status == "Fail")
+            + len(empty_headings)
+        )
 
         accessibility_score = (
             max(0, (total_checks - total_issues) / total_checks * 100)

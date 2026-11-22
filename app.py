@@ -155,7 +155,14 @@ def scan_website(raw_url):
         heading_status = (
             "Pass" if headings and not empty_headings else "Fail"
         )
-
+                # WCAG 2.4.3 - Focus Order (preliminary check)
+        focus_elements = soup.find_all(
+            ["a", "button", "input", "select", "textarea"]
+        )
+        focus_status = (
+            "Needs manual testing" if focus_elements
+            else "No interactive elements detected"
+        )
         headers = response.headers
 
         # Image checks
@@ -276,6 +283,7 @@ def scan_website(raw_url):
             ["Page language (WCAG 3.1.1)", language_status],
             ["Page title (WCAG 2.4.2)", title_status],
             ["Headings and labels (WCAG 2.4.6)", heading_status],
+            ["Focus order (WCAG 2.4.3)", focus_status],
         ]
         heading_rows = [["Heading", "Count"]] + [
             [name, count] for name, count in heading_counts.items()

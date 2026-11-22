@@ -275,6 +275,7 @@ def scan_website(raw_url):
             ["WCAG 3.3.2 - Form controls without labels", len(missing_labels)],
             ["Page language (WCAG 3.1.1)", language_status],
             ["Page title (WCAG 2.4.2)", title_status],
+            ["Headings and labels (WCAG 2.4.6)", heading_status],
         ]
         heading_rows = [["Heading", "Count"]] + [
             [name, count] for name, count in heading_counts.items()

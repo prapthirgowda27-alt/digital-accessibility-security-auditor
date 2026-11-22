@@ -455,10 +455,12 @@ def scan_website(raw_url):
         return report, pdf_path, charts_html
 
     except Exception as error:
+        error_message = escape(str(error))
+
         return (
             "## Scan could not be completed\n\n"
-            + escape(str(error))
-            + "\n\nCheck the URL and try again.",
+            f"**Error details:** {error_message}\n\n"
+            "Check the website URL or try another website.",
             None,
             ""
         )

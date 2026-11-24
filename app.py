@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 from xml.sax.saxutils import escape
 
 import gradio as gr
+from playwright.sync_api import sync_playwright
 import requests
 from bs4 import BeautifulSoup
 from reportlab.lib import colors

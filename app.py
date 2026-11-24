@@ -127,25 +127,41 @@ def create_donut_charts(access_pass, access_fail, security_pass, security_fail):
 def scan_website(raw_url):
     try:
         url = validate_url(raw_url)
-        response = requests.get(
-            url,
-            timeout=30,
-            allow_redirects=True,
-            headers={
-                "User-Agent": (
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                    "AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
+        
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            try:
+                page = browser.new_page()
+
+                browser_response = page.goto(
+                    url,
+                    wait_until="domcontentloaded",
+                    timeout=45000
                 )
-            }
-        )
-        response.raise_for_status()
 
-        final_url = validate_url(response.url)
+                page.wait_for_timeout(3000)
 
-        if not response.text.strip():
+                if browser_response is None:
+                    raise ValueError(
+                        "Website did not return an HTTP response."
+                    )
+
+                http_status = browser_response.status
+                response_headers = browser_response.all_headers()
+                final_url = validate_url(page.url)
+                html_content = page.content()
+
+            finally:
+                browser.close()
+
+        if not html_content.strip():
             raise ValueError("Website returned an empty HTML page.")
 
-        soup = BeautifulSoup(response.text, "html.parser")
+        soup = BeautifulSoup(html_content, "html.parser")
+
+        if not soup.find("html"):
+            raise ValueError("Website did not return a valid HTML document.")
+
 
         if not soup.find("html"):
             raise ValueError("Website did not return a valid HTML document.")

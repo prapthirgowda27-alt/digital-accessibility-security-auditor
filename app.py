@@ -408,7 +408,7 @@ def scan_website(raw_url):
 
 **Website:** {escape(final_url)}
 
-**HTTP Status:** {response.status_code}
+**HTTP Status:** {http_status}
 **Page Language (WCAG 3.1.1):** {language_status}
 
 ## 1. Accessibility Results
@@ -456,9 +456,9 @@ def scan_website(raw_url):
 
         pdf_path = create_pdf([
             ("Website information", [
-                ["Website", final_url],
-                ["HTTP status", response.status_code]
-            ]),
+    ["Website", final_url],
+    ["HTTP status", http_status]
+]),
             ("Accessibility results", access_rows),
             ("Heading structure", heading_rows),
             ("Security results", security_rows),

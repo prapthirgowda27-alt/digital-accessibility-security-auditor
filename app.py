@@ -147,7 +147,10 @@ def scan_website(raw_url):
                     )
 
                 http_status = browser_response.status
-                response_headers = browser_response.all_headers()
+                response_headers = {
+    name.title(): value
+    for name, value in browser_response.all_headers().items()
+}
                 final_url = validate_url(page.url)
                 html_content = page.content()
 

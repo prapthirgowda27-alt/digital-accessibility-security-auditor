@@ -197,7 +197,7 @@ def scan_website(raw_url):
             "Needs manual testing" if focus_elements
             else "No interactive elements detected"
         )
-        headers = response.headers
+        headers = response_headers
 
         # Image checks
         images = soup.find_all("img")

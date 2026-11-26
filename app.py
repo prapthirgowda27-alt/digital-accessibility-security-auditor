@@ -147,6 +147,12 @@ def scan_website(raw_url):
                     )
 
                 http_status = browser_response.status
+                if http_status >= 400:
+                    raise ValueError(
+                        f"Website returned HTTP {http_status}. "
+                        "The page may be unavailable or may block automated scanning. "
+                        "No accessibility score was generated."
+                    )
                 response_headers = {
     name.title(): value
     for name, value in browser_response.all_headers().items()
